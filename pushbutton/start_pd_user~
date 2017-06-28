@@ -1,0 +1,13 @@
+#! /bin/bash
+
+#nLBO --->pioE24
+#echo 152 > /sys/class/gpio/export
+
+#poweroff button--->pioD20
+#echo 116 > /sys/class/gpio/export
+
+##detect usb plug in
+echo 137 > /sys/class/gpio/export
+
+cd /boot/uboot/system
+./pd_user
