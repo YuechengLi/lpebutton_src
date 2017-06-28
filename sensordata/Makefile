@@ -47,7 +47,8 @@ CFLAGS = -Wall -I ../ -I /home/ycli/work/A5/lpebutton_A5_2016/gcc-linaro-5.3-201
 
 LDFLAGS = -L ../ -L /home/ycli/work/A5/lpebutton_A5_2016/gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf/usr/lib
 
-LIBS = ./opus-1.1.3_2/.libs/libopus.a ./opus-1.1.3_2/.libs/libopus.so -pthread -lm -lrt
+LIBS = ./opus-1.1.3_2/libs/libopus.a ./opus-1.1.3_2/libs/libopus.so -pthread -lm -lrt
+#LIBS = ./libopus.a ./libopus.so -pthread -lm -lrt
 
 TARGET = lp_ebutton
 

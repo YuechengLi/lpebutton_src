@@ -5,8 +5,8 @@ OBJECTS =  	initialize_global.o	\
 		get_param.o	\
 		mpu9250_spi.o	\
 		msp430_spi.o	\
-		lp_ebutton.o	\
-		timer.o
+		lp_ebutton.o#	\
+		#timer.o
 		  #retrieve_data.o 	\
 		#readSensor.o	\
 #LogMsg.o
@@ -16,8 +16,8 @@ SRCS = 		initialize_global.c	\
 		get_param.c	\
 		mpu9250_spi.c	\
 		msp430_spi.c	\
-		lp_ebutton.c	\
-		timer.c
+		lp_ebutton.c	#\
+		#timer.c
  #retrieve_data.c 	\
 #		readSensor.c	\
 #LogMsg.c	\
@@ -26,7 +26,7 @@ DEPENDENCY =   	get_time.h	\
 		global_def.h	\
 		mpu9250_spi.h	\
 		msp430_spi.h	\
-		timer.h		\
+		#timer.h		\
 		./opus-1.1.3_2/include/opus.h
 
 #		LogMsg.h	
@@ -48,6 +48,7 @@ CFLAGS = -Wall -I ../ -I /home/ycli/work/A5/lpebutton_A5_2016/gcc-linaro-5.3-201
 LDFLAGS = -L ../ -L /home/ycli/work/A5/lpebutton_A5_2016/gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf/usr/lib
 
 LIBS = ./opus-1.1.3_2/.libs/libopus.a ./opus-1.1.3_2/.libs/libopus.so -pthread -lm -lrt
+#LIBS = ./libopus.a ./libopus.so -pthread -lm -lrt
 
 TARGET = lp_ebutton
 
