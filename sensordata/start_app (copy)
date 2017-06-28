@@ -1,0 +1,106 @@
+#!/bin/bash
+
+echo "-----------------------------"
+
+
+#turn off led
+echo none > /sys/class/leds/led_red/trigger
+echo none > /sys/class/leds/led_blue/trigge
+echo none > /sys/class/leds/led_green/trigger
+echo 0 > /sys/class/leds/led_red/brightness
+echo 0 > /sys/class/leds/led_blue/brightness
+echo 0 > /sys/class/leds/led_green/brightness
+
+
+#poweroff button--->pioD20
+#echo 116 > /sys/class/gpio/export
+
+#nLBO --->pioE24
+echo 152 > /sys/class/gpio/export
+
+
+##detect usb plug in
+echo 137 > /sys/class/gpio/export
+
+
+##detect usb plug in
+#echo 137 > /sys/class/gpio/export
+#usb_plugged=$(cat /sys/class/gpio/pioE9/value)
+
+#exit
+#if [ $usb_plugged = "1" ]; then 
+#	##load USB mass storage
+#	insmod /boot/uboot/system/gadget/libcomposite.ko
+#	insmod /boot/uboot/system/gadget/function/usb_f_mass_storage.ko
+#	insmod /boot/uboot/system/gadget/legacy/g_mass_storage.ko file=/dev/loop0 stall=0 removable=1
+
+#	#blue led
+#	echo heartbeat > /sys/class/leds/led_blue/trigger
+
+
+#	echo "usb plugged in, ebutton app stopped!!!"
+
+#	while [ $usb_plugged = "1" ]
+#	do
+#		usb_plugged=$(cat /sys/class/gpio/pioE9/value)
+#	done
+	
+#	#rmmod /boot/uboot/system/gadget/legacy/g_mass_storage.ko
+#	#rmmod /boot/uboot/system/gadget/function/usb_f_mass_storage.ko
+#	#rmmod /boot/uboot/system/gadget/libcomposite.ko
+
+#	poweroff
+
+#	exit
+#fi
+
+
+#Enable SysRq
+echo 1 > /proc/sys/kernel/sysrq
+
+
+##detect low power
+lbo=$(cat /sys/class/gpio/pioE24/value)
+if [ $lbo = "0" ]; then 
+	usb_plugged=$(cat /sys/class/gpio/pioE9/value)
+	if [ $usb_plugged = "0" ]; then
+		poweroff
+	fi
+fi
+
+
+##mount ntfs filesystem
+mkdir /media/lpebutton
+losetup /dev/loop0 /dev/mmcblk0p3
+#ntfs-3g /dev/loop0 /media/lpebutton 
+mount -t ntfs /dev/loop0 /media/lpebutton 
+
+#cd folder
+cd "/boot/uboot/system"
+#cd "/media/lpebutton/app"
+
+#copy config file
+cp -n config /media/lpebutton
+
+#run program
+./lp_ebutton &
+./pd_user &
+./softp &
+
+
+#if fail
+#system("echo heartbeat > /sys/class/leds/led_blue/trigger");
+
+#poweroff
+
+#if . /media/lpebutton/app/lp_ebutton &
+#then	
+#	echo "app started!!!"
+#else
+#	mkdir /media/lpebutton/app
+#	cp /boot/uboot/system/lp_ebutton /media/lpebutton/app	
+#	cd "/media/lpebutton/app"
+#	./lp_ebutton &
+#if
+
+echo "-----------------------------"

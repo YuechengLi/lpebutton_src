@@ -1,0 +1,52 @@
+/*
+ * global_def.h
+ *
+ *  Created on: April 4, 2011
+ *      Author: Yaofeng Yue
+ */
+
+#ifndef GLOBAL_DEF_H_
+#define GLOBAL_DEF_H_
+
+#define MAXSTRING 200
+
+#define PATH  "/media/lpebutton/eButton_Data/"
+//"/boot/uboot/Data/"
+#define CONFIG_FILE_NAME "/media/lpebutton/app/config"//"/boot/uboot/system/config"
+
+//#define FOLDER_NAME "lcn_obesity"
+
+#define MAX_PIC 400000
+#define FOLDER_PIC 4000
+
+typedef struct {
+	char AUTO_OFF_EN;
+	int ID;
+        char CAMERA_ON;
+	char IMAGE_ENCRYPTION;
+	char LOW_POWER_MODE;
+	char DMIC_ON;
+	char IMU_ON;
+	//int IMU_SPEED;
+	char GYRO_FS;
+	char ACC_FS;
+	char GPS_ON;
+
+	char MCU_MODE;
+	char MCU_BARO_ON;
+	char MCU_MOTION_ON;
+	char MCU_LIS_ON;
+	char MCU_OPTIC_ON;
+	char MCU_SAMPLING_RATE;
+
+	char RTC_UPDATE;
+	char RTC_TIME[MAXSTRING];
+	char RTC_AUTO_CR;
+ 
+} option_struct;
+
+void cmd_proc(char *file_name, int argc, char *argv[]);
+void initialize_global(option_struct *);
+void get_param(option_struct *, char *);
+
+#endif /* GLOBAL_DEF_H_ */

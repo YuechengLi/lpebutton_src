@@ -1,0 +1,125 @@
+#!/bin/bash
+
+echo "-----------------------------"
+
+
+#turn off led
+echo none > /sys/class/leds/led_red/trigger
+echo none > /sys/class/leds/led_blue/trigge
+echo none > /sys/class/leds/led_green/trigger
+echo 1 > /sys/class/leds/led_red/brightness
+echo 0 > /sys/class/leds/led_blue/brightness
+echo 0 > /sys/class/leds/led_green/brightness
+
+
+#poweroff button--->pioD20
+#echo 116 > /sys/class/gpio/export
+
+#nLBO --->pioE24
+echo 152 > /sys/class/gpio/export
+##detect usb plug in ---> pioE9
+echo 137 > /sys/class/gpio/export
+
+#MSP430 --->pioD14
+echo 110 > /sys/class/gpio/export
+
+#moto control, pioE11
+echo 139 > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/pioE11/direction
+
+echo 1 > /sys/class/gpio/pioE11/value
+echo 0 > /sys/class/gpio/pioE11/value
+
+##detect usb plug in for data access
+#usb_plugged=$(cat /sys/class/gpio/pioE9/value)
+#if [ $usb_plugged = "1" ]; then 
+	#echo "usb plugged in"
+#	echo 0 > /sys/class/leds/led_red/brightness
+#	echo 1 > /sys/class/leds/led_blue/brightness
+#	echo 0 > /sys/class/leds/led_green/brightness
+
+	##load USB mass storage
+#	losetup /dev/loop0 /dev/mmcblk0p3
+#	ntfs-3g /dev/loop0 /media/lpebutton
+#	insmod /boot/uboot/system/gadget/libcomposite.ko
+#	insmod /boot/uboot/system/gadget/function/usb_f_mass_storage.ko
+#	insmod /boot/uboot/system/gadget/legacy/g_mass_storage.ko file=/dev/loop0 stall=0 removable=1
+
+	#wait for unplug
+#	while [ $usb_plugged = "1" ]
+#	do
+#		usb_plugged=$(cat /sys/class/gpio/pioE9/value)
+#	done
+	
+	#rmmod /boot/uboot/system/gadget/legacy/g_mass_storage.ko
+	#rmmod /boot/uboot/system/gadget/function/usb_f_mass_storage.ko
+	#rmmod /boot/uboot/system/gadget/libcomposite.ko
+
+	#blue led
+#	echo 0 > /sys/class/leds/led_blue/brightness
+#	echo heartbeat > /sys/class/leds/led_blue/trigger
+
+#	shutdown -h now
+
+#	exit
+#fi
+
+##detect low power
+lbo=$(cat /sys/class/gpio/pioE24/value)
+if [ $lbo = "0" ]; then 
+	usb_plugged=$(cat /sys/class/gpio/pioE9/value)
+	if [ $usb_plugged = "0" ]; then
+		poweroff
+#shutdown -h now
+		exit
+	fi
+fi
+
+
+#Enable SysRq
+#echo 1 > /proc/sys/kernel/sysrq
+
+
+##mount ntfs filesystem with loop
+#mkdir -p /media/lpebutton
+#losetup /dev/loop0 /dev/mmcblk0p3
+#ntfs-3g /dev/loop0 /media/lpebutton 
+
+
+##mount ntfs filesystem
+mkdir -p /media/lpebutton
+ntfs-3g /dev/mmcblk0p3 /media/lpebutton 
+
+
+#cd folder
+cd "/boot/uboot/system"
+#cd "/media/lpebutton/app"
+
+#copy config file, no replacement
+cp -n config /media/lpebutton
+
+#run program
+# && [ -f /boot/uboot/system/lb_detect ];
+if [ -f /boot/uboot/system/lp_ebutton ] && [ -f /boot/uboot/system/softp ];
+then
+	nice -n 0 ./lp_ebutton &
+	nice -n 0 ./softp &
+	
+	#usb_plugged=$(cat /sys/class/gpio/pioE9/value)
+	#if [ $usb_plugged = "0" ]; then
+	#	nice -n -5 ./lb_detect &
+	#fi	
+
+else
+	poweroff
+#shutdown -h now
+fi
+
+if [ -f /boot/uboot/system/usb_detect ];
+then
+	nice -n 0 ./usb_detect &
+fi
+
+echo 0 > /sys/class/leds/led_red/brightness
+
+exit 0

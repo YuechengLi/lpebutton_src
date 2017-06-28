@@ -1,0 +1,88 @@
+/*
+ * test.h
+ *
+ *  Created on: Aug 5, 2010
+ *      Author: root
+ */
+
+#ifndef TEST_H_
+#define TEST_H_
+#include "global_def.h"
+//#include "JPGApi.h"
+#include <stdio.h>
+#include "retrieve_data.h"
+
+#define CAMERA_FD 1
+#define INERTIAL_FD 2
+#define BARO_FD 3
+#define MAGNET_FD 4
+#define LIGHT_FD 5
+#define GPS_FD 6
+#define GYRO_FD 7
+
+#define BMP085_ULTRALOWPOWER 0
+#define BMP085_STANDARD      1
+#define BMP085_HIGHRES       2
+#define BMP085_ULTRAHIGHRES  3
+#define BMP085_CAL_AC1           0xAA  // R   Calibration data (16 bits)
+#define BMP085_CAL_AC2           0xAC  // R   Calibration data (16 bits)
+#define BMP085_CAL_AC3           0xAE  // R   Calibration data (16 bits)    
+#define BMP085_CAL_AC4           0xB0  // R   Calibration data (16 bits)
+#define BMP085_CAL_AC5           0xB2  // R   Calibration data (16 bits)
+#define BMP085_CAL_AC6           0xB4  // R   Calibration data (16 bits)
+#define BMP085_CAL_B1            0xB6  // R   Calibration data (16 bits)
+#define BMP085_CAL_B2            0xB8  // R   Calibration data (16 bits)
+#define BMP085_CAL_MB            0xBA  // R   Calibration data (16 bits)
+#define BMP085_CAL_MC            0xBC  // R   Calibration data (16 bits)
+#define BMP085_CAL_MD            0xBE  // R   Calibration data (16 bits)
+
+#define BMP085_CONTROL           0xF4 
+#define BMP085_TEMPDATA          0xF6
+#define BMP085_PRESSUREDATA      0xF6
+#define BMP085_READTEMPCMD          0x2E
+#define BMP085_READPRESSURECMD            0x34
+
+#define BAROMETER_DATA   _IOW('H', 0x01, unsigned long)
+#define BAROMETER_CALIBRATE   _IOW('H', 0x02, unsigned long)
+
+#define HMC5883L_REGISTER_A        0x00  // R   Calibration data (16 bits)
+#define HMC5883L_REGISTER_B        0x01  // R   Calibration data (16 bits)
+#define HMC5883L_REGISTER_MODE     0x02  // R   Calibration data (16 bits)    
+#define HMC5883L_DATA_OUTPUT       0x03  // R   Calibration data (16 bits)
+#define HMC5883L_REGISTER_STATUS   0x09  // R   Calibration data (16 bits)
+#define HMC5883L_REGISTER_INDEN_A  0x10  // R   Calibration data (16 bits)
+#define HMC5883L_REGISTER_INDEN_B  0x11  // R   Calibration data (16 bits)
+#define HMC5883L_REGISTER_INDEN_C  0x12  // R   Calibration data (16 bits)
+
+#define HMC5883L_CONTINUOUS_MODE      0x00
+#define HMC5883L_SINGLE_MODE      0x01
+#define PI 3.141592
+
+#define MAGNETOMETER_DATA   _IOW('M', 0x01, unsigned long)
+
+#define HMC5883L_SCALE_088	0x00
+#define HMC5883L_SCALE_130	0x01
+#define HMC5883L_SCALE_190	0x02
+#define HMC5883L_SCALE_250	0x03
+#define HMC5883L_SCALE_400	0x04
+#define HMC5883L_SCALE_470	0x05
+#define HMC5883L_SCALE_560	0x06
+#define HMC5883L_SCALE_810	0x07
+
+#define INERTIAL_REGISTER   _IOW('G', 0x01, unsigned long)
+
+//static int IM_WIDTH = 320;//640;//modified to local parameter, ycli, 10162014
+//static int IM_HEIGHT = 240;//480;
+//static int IM_WIDTH = 1280;
+//static int IM_HEIGHT = 960;
+static int wait_cap_sec=0;
+//static int YUV422_FRAME_BUFFER_SIZE = IM_WIDTH*IM_HEIGHT*2;
+void cmd_proc(char *file_name, int argc, char *argv[]);
+void initialize_global(option_struct *);
+void get_param(option_struct *, char *);
+void capture(int, char * filename, int, int, option_struct *);
+void targetFolder(char *,char *,char *);
+int maxIndex(char *,int);
+//void wait ( double);
+
+#endif /* TEST_H_ */
